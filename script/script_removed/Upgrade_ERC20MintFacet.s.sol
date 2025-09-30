@@ -3,8 +3,8 @@ pragma solidity ^0.8.20;
 
 import {Script} from "forge-std/Script.sol";
 import {console} from "forge-std/console.sol";
-import {IDiamondCut} from "../src/interfaces/IDiamondCut.sol";
-import {ERC20MintFacet} from "../src/facet/ERC20MintFacet.sol";
+import {IDiamondCut} from "../../src/interfaces/IDiamondCut.sol";
+import {ERC20MintFacet} from "../../src/facet/facet_removed/ERC20MintFacet.sol";
 
 contract Upgrade_ERC20MintFacet is Script {
     function run() external {

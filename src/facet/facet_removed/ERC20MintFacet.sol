@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {LibERC20} from "../libraries/LibERC20.sol";
-import {LibDiamond} from "../libraries/LibDiamond.sol";
+import {LibERC20} from "../../libraries/LibERC20.sol";
+import {LibDiamond} from "../../libraries/LibDiamond.sol";
 
 contract ERC20MintFacet {
     event Transfer(address indexed from, address indexed to, uint256 value);
