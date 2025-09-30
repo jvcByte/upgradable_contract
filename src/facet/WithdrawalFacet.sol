@@ -17,9 +17,7 @@ contract WithdrawalFacet {
     function withdrawETH() external payable {
         LibDiamond.enforceIsContractOwner();
         address to = msg.sender;
-        
         if (to == address(0)) revert InvalidSender();
-        
         (bool success, ) = to.call{value: address(this).balance}("");
         if (!success) revert WithdrawalFailed();
         
