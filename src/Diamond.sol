@@ -53,3 +53,7 @@ contract Diamond {
 }
 
 
+// sepolia deployment:
+// DIAMOND=0xE2462837FBd9f2392B2e10307f3Cfd9475eb7873
+
+
