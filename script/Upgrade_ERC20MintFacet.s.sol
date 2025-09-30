@@ -18,17 +18,28 @@ contract Upgrade_ERC20MintFacet is Script {
             vm.startBroadcast();
         }
 
-        // deploy the admin facet
-        ERC20MintFacet adminFacet = new ERC20MintFacet();
+        // deploy the mint facet
+        ERC20MintFacet mintFacet = new ERC20MintFacet();
 
-        // prepare cut: add mint(address,uint256)
-        IDiamondCut.FacetCut[] memory cut = new IDiamondCut.FacetCut[](1);
-        bytes4[] memory selectors = new bytes4[](1);
-        selectors[0] = bytes4(keccak256("mint(address,uint256)"));
+        // prepare cut in two steps to avoid selector conflicts
+        // 1) Replace existing mint(address,uint256) if present
+        IDiamondCut.FacetCut[] memory cut = new IDiamondCut.FacetCut[](2);
+
+        bytes4[] memory replaceSelectors = new bytes4[](1);
+        replaceSelectors[0] = bytes4(keccak256("mint(address,uint256)"));
         cut[0] = IDiamondCut.FacetCut({
-            facetAddress: address(adminFacet),
+            facetAddress: address(mintFacet),
+            action: IDiamondCut.FacetCutAction.Replace,
+            functionSelectors: replaceSelectors
+        });
+
+        // 2) Add mintMsgSender(uint256) if it's a new selector
+        bytes4[] memory addSelectors = new bytes4[](1);
+        addSelectors[0] = bytes4(keccak256("mintMsgSender(uint256)"));
+        cut[1] = IDiamondCut.FacetCut({
+            facetAddress: address(mintFacet),
             action: IDiamondCut.FacetCutAction.Add,
-            functionSelectors: selectors
+            functionSelectors: addSelectors
         });
 
         // execute diamondCut without initializer
@@ -36,6 +47,6 @@ contract Upgrade_ERC20MintFacet is Script {
 
         vm.stopBroadcast();
 
-        console.log("Added ERC20AdminFacet at:", address(adminFacet));
+        console.log("Added ERC20MintFacet at:", address(mintFacet));
     }
 }
