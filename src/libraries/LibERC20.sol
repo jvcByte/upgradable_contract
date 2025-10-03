@@ -11,6 +11,7 @@ library LibERC20 {
         uint256 totalSupply;
         mapping(address => uint256) balances;
         mapping(address => mapping(address => uint256)) allowances;
+        address svgLogoContract; // Address of the SVG logo contract
     }
 
     function erc20Storage() internal pure returns (ERC20Storage storage es) {
@@ -18,5 +19,18 @@ library LibERC20 {
         assembly {
             es.slot := position
         }
+    }
+
+    /// @notice Set the SVG logo contract address
+    /// @param svgLogoAddress The address of the SVG logo contract
+    function setSVGLogoContract(address svgLogoAddress) internal {
+        ERC20Storage storage es = erc20Storage();
+        es.svgLogoContract = svgLogoAddress;
+    }
+
+    /// @notice Get the SVG logo contract address
+    /// @return The address of the SVG logo contract
+    function getSVGLogoContract() internal view returns (address) {
+        return erc20Storage().svgLogoContract;
     }
 }
